@@ -26,7 +26,7 @@ const Nutrition = () => {
   };
 
   return (
-    <Box maxW="1350px" mx="auto" py="5">
+    <Box maxW="1350px" mx="auto" py="5" px="3">
       <Heading textAlign="center">Nutrition Analysis</Heading>
       <Text pt="100px" maxW="750px" mx="auto" fontSize="xl" textAlign="center">
         Enter an ingredient list for what you are cooking, like "1 cup rice, 10
@@ -49,7 +49,8 @@ const Nutrition = () => {
                   fontWeight="600"
                   fontSize="lg"
                   borderRadius="xl"
-                  width="xl"
+                  // mx={5}
+                  width={{ base: "sm", md: "xl" }}
                   height="250px"
                   value={searchTerm}
                   onChange={handleInputChange}

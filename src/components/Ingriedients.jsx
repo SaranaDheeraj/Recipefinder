@@ -12,7 +12,7 @@ import React from "react";
 const Ingriedients = ({ ingredients }) => {
   return (
     <TableContainer
-      width="lg"
+      width={{ base: "sm", md: "lg" }}
       border="2px solid gray"
       bgColor="teal.50"
       borderRadius="xl"

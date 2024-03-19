@@ -15,7 +15,7 @@ import CardItem2 from "../components/CardItem2";
 
 const NutritionCard = ({ nutrition }) => {
   return (
-    <Card maxW="md" boxShadow="lg" bgColor="orange.100">
+    <Card width="350px" boxShadow="lg" bgColor="orange.100">
       <CardBody>
         <Stack>
           <Heading as="h1" textAlign="center" p={2}>
