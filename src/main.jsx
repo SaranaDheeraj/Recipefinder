@@ -20,10 +20,6 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not Found</div>,
   },
   {
-    path: "/recipes/:id",
-    element: <RecipePage />,
-  },
-  {
     path: "/nutrition",
     element: (
       <div>
@@ -34,6 +30,10 @@ const router = createBrowserRouter([
       </div>
     ),
     errorElement: <div>Something went wrong</div>,
+  },
+  {
+    path: "/recipes/:id",
+    element: <RecipePage />,
   },
 ]);
 
