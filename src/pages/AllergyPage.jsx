@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Select, Text } from "@chakra-ui/react";
+import { strict_output } from "../gpt";
 
 export default function AllergyPage() {
   const [healthConditions, setHealthConditions] = useState([]);
   const [foodGroups, setFoodGroups] = useState([]);
   const [selectedCondition, setSelectedCondition] = useState("");
   const [selectedFoodGroup, setSelectedFoodGroup] = useState("");
+  const [healthyFoods, setHealthyFoods] = useState([]);
+  const [unHealthyFoods, setUnHealthyFoods] = useState([]);
 
   useEffect(() => {
     const fetchHealthConditions = async () => {
@@ -15,9 +18,7 @@ export default function AllergyPage() {
           "https://5jocnrfkfb.execute-api.us-east-1.amazonaws.com/PersonalRemedies/nutridigm/api/v2/healthconditions?subscriptionID=mYGuEibZ9IXzmqbRezevH"
         );
 
-        // Flatten the arrays
-        const combinedConditions = response.data.flat();
-        setHealthConditions(combinedConditions);
+        setHealthConditions(response.data);
       } catch (error) {
         console.error("Error fetching health conditions:", error);
       }
@@ -29,9 +30,7 @@ export default function AllergyPage() {
           "https://5jocnrfkfb.execute-api.us-east-1.amazonaws.com/PersonalRemedies/nutridigm/api/v2/foodgroups?subscriptionID=mYGuEibZ9IXzmqbRezevH"
         );
 
-        // Flatten the arrays
-        const combinedFoodGroups = response.data.flat();
-        setFoodGroups(combinedFoodGroups);
+        setFoodGroups(response.data);
       } catch (error) {
         console.error("Error fetching food groups:", error);
       }
@@ -41,22 +40,48 @@ export default function AllergyPage() {
     fetchFoodGroups();
   }, []);
 
+  useEffect(() => {
+    if (selectedCondition && selectedFoodGroup) {
+      const generateAllergy = async () => {
+        try {
+          const outputUnits = await strict_output(
+            `You are an AI capable of generating the most relevant food for the health condition`,
+            `Please provide an array of healthy foods and an array of foods that you should avoid for the given health condition: ${selectedCondition} and food group: ${selectedFoodGroup}`,
+            {
+              healthyFoods: "generate an array of healthy foods as required",
+              unHealthyFoods: "generate an array of unhealthy foods as required"
+            }
+          );
+
+          setHealthyFoods(outputUnits.healthyFoods || []);
+          setUnHealthyFoods(outputUnits.unHealthyFoods || []);
+        } catch (error) {
+          console.error("Error generating allergy data:", error.response);
+        }
+      };
+
+      generateAllergy();
+    }
+  }, [selectedCondition, selectedFoodGroup]);
+
   return (
-    <Box width="300px" margin="auto" padding="20px">
+    <Box width="400px" margin="auto" padding="20px">
       <Text fontSize="2xl" mb="4">
-        Allergy Page
+        Welcome to the Allergy Page
+      </Text>
+      <Text mb="4">
+        This page helps you explore food options based on your health condition and food preferences.
       </Text>
       <Select
         placeholder="Select health condition"
-        onChange={(e) => {
-          setSelectedCondition(e.target.value);
-        }}
+        onChange={(e) => setSelectedCondition(e.target.value)}
         value={selectedCondition}
+        mb="4"
       >
         {healthConditions.map((condition) => (
           <option
             key={condition.healthConditionID}
-            value={condition.healthConditionID}
+            value={condition.description}
           >
             {condition.description}
           </option>
@@ -66,31 +91,42 @@ export default function AllergyPage() {
         placeholder="Select a food group"
         onChange={(e) => setSelectedFoodGroup(e.target.value)}
         value={selectedFoodGroup}
-        mt="4"
+        mb="4"
       >
         {foodGroups.map((food) => (
-          <option key={food.foodGroupID} value={food.foodGroupID}>
+          <option key={food.foodGroupID} value={food.description}>
             {food.description}
           </option>
         ))}
       </Select>
 
       {selectedCondition && (
-        <Box mt="4">
+        <Box mb="4">
           <Text fontSize="lg">Selected Condition:</Text>
           <Text fontWeight="bold">{selectedCondition}</Text>
-          <Text>
-            {
-              healthConditions.find((cond) => cond.healthConditionID == 46)
-                ?.description
-            }
-          </Text>
         </Box>
       )}
       {selectedFoodGroup && (
-        <Box mt="4">
+        <Box mb="4">
           <Text fontSize="lg">Selected Food Group:</Text>
           <Text fontWeight="bold">{selectedFoodGroup}</Text>
+        </Box>
+      )}
+      
+      {healthyFoods.length > 0 && (
+        <Box mb="4">
+          <Text fontSize="lg">Healthy Foods:</Text>
+          {healthyFoods.map((food, index) => (
+            <Text key={index}>{food}</Text>
+          ))}
+        </Box>
+      )}
+      {unHealthyFoods.length > 0 && (
+        <Box mb="4">
+          <Text fontSize="lg">Unhealthy Foods:</Text>
+          {unHealthyFoods.map((food, index) => (
+            <Text key={index}>{food}</Text>
+          ))}
         </Box>
       )}
     </Box>
