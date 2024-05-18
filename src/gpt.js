@@ -3,7 +3,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { jsonrepair } from "jsonrepair";
 
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: 'sk-proj-BtwAYwa9FiRCMGc1hNynT3BlbkFJt03BVa44BQky7ntY0BBu',
 });
 const openai = new OpenAIApi(configuration);
 
