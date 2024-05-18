@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage.jsx";
 import RecipePage from "./pages/RecipePage.jsx";
 import Nutrition from "./pages/Nutrition.jsx";
 import NavBar from "./components/NavBar.jsx";
+import AllergyPage from "./pages/AllergyPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/recipes/:id",
     element: <RecipePage />,
+  },
+  {
+    path: "/allergy",
+    element: <AllergyPage />,
   },
 ]);
 
