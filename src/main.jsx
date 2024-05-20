@@ -37,7 +37,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/allergy",
-    element: <AllergyPage />,
+    element: (
+      <div>
+        <NavBar />
+        <AllergyPage />
+      </div>
+    ),
   },
 ]);
 
