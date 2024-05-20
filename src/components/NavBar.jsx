@@ -24,6 +24,9 @@ const NavBar = () => {
         <Link href="/nutrition" _hover={{ color: "teal.600" }}>
           Nutrition
         </Link>
+        <Link href="/allergy" _hover={{ color: "teal.600" }}>
+          Allergy
+        </Link>
       </Flex>
     </Flex>
   );
